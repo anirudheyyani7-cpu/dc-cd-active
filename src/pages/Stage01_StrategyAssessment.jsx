@@ -1,0 +1,103 @@
+import { TrendingUp } from 'lucide-react';
+import StageLayout from '../components/stage-pages/StageLayout';
+import { FormField, Select, MultiSelect, SliderField } from '../components/stage-pages/FormComponents';
+import { callClaude, buildStagePrompt } from '../services/claude-api';
+import { loadDatacenters, getCountryDataForAI } from '../services/datacenter-data';
+
+const STAGE_CONTEXT = `This stage covers market opportunity analysis for datacenter investment — identifying target regions, assessing demand drivers, evaluating competitive landscapes, and recommending entry strategies.`;
+
+function Fields({ formData, updateField }) {
+  return (
+    <>
+      <FormField label="Target Region">
+        <Select
+          value={formData.region}
+          onChange={v => updateField('region', v)}
+          options={['India', 'Singapore', 'Ireland', 'United Kingdom', 'United States', 'Multi-Region']}
+          placeholder="Select region..."
+        />
+      </FormField>
+
+      <FormField label="Primary Workload Type" hint="select all that apply">
+        <MultiSelect
+          value={formData.workloads}
+          onChange={v => updateField('workloads', v)}
+          options={['AI/ML Training', 'Cloud/SaaS', 'Enterprise IT', 'Colocation', 'Edge Computing', 'HPC', 'Gaming/Media']}
+        />
+      </FormField>
+
+      <FormField label="Target Capacity Range">
+        <SliderField
+          value={formData.capacity || 50}
+          onChange={v => updateField('capacity', v)}
+          min={5}
+          max={500}
+          step={5}
+          formatValue={v => `${v} MW`}
+          leftLabel="5 MW"
+          rightLabel="500 MW"
+        />
+      </FormField>
+
+      <FormField label="Investment Budget Range">
+        <Select
+          value={formData.budget}
+          onChange={v => updateField('budget', v)}
+          options={['< $50M', '$50M – $200M', '$200M – $500M', '$500M – $1B', '> $1B']}
+          placeholder="Select budget range..."
+        />
+      </FormField>
+
+      <FormField label="Target Timeline to Operations">
+        <Select
+          value={formData.timeline}
+          onChange={v => updateField('timeline', v)}
+          options={['6 months', '12 months', '18 months', '24+ months']}
+          placeholder="Select timeline..."
+        />
+      </FormField>
+
+      <FormField label="Sustainability Priority">
+        <SliderField
+          value={formData.sustainability || 3}
+          onChange={v => updateField('sustainability', v)}
+          min={1}
+          max={5}
+          step={1}
+          formatValue={v => ['', 'Low', 'Moderate', 'Important', 'High', 'Critical'][v]}
+          leftLabel="Low"
+          rightLabel="Critical"
+        />
+      </FormField>
+    </>
+  );
+}
+
+async function generateInsights(formData) {
+  const dcData = await loadDatacenters();
+  const regionData = formData.region && formData.region !== 'Multi-Region'
+    ? getCountryDataForAI(dcData, formData.region)
+    : Object.keys(dcData.country_summary).map(c => getCountryDataForAI(dcData, c)).join('\n\n');
+
+  const prompt = buildStagePrompt(
+    'Stage 01: Strategy Assessment & Market Scan',
+    STAGE_CONTEXT,
+    formData,
+    regionData
+  );
+  return callClaude({ prompt, maxTokens: 2500 });
+}
+
+export default function Stage01() {
+  return (
+    <StageLayout
+      stageNum="01"
+      stageName="Strategy Assessment"
+      stageDescription="Conduct a comprehensive market scan and opportunity analysis to validate your datacenter investment thesis. Identify demand drivers, competitive dynamics, and optimal entry strategy for your target region."
+      stageIcon={TrendingUp}
+      color="#00338D"
+      formFields={Fields}
+      generateInsights={generateInsights}
+    />
+  );
+}
