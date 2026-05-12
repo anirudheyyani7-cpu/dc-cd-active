@@ -13,7 +13,7 @@ Always conclude with a "## Key Risks & Considerations" section and "## Recommend
 
 export async function callClaude({ prompt, systemOverride, maxTokens = 2048 }) {
   if (!ANTHROPIC_API_KEY) {
-    throw new Error('Anthropic API key not configured. Please set VITE_ANTHROPIC_API_KEY in your .env file.');
+    throw new Error('Anthropic API key not configured. Please set ANTHROPIC_API_KEY in your .env file.');
   }
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -45,7 +45,7 @@ export async function callClaude({ prompt, systemOverride, maxTokens = 2048 }) {
 
 export async function* callClaudeStream({ prompt, systemOverride, maxTokens = 2048 }) {
   if (!ANTHROPIC_API_KEY) {
-    throw new Error('Anthropic API key not configured. Please set VITE_ANTHROPIC_API_KEY in your .env file.');
+    throw new Error('Anthropic API key not configured. Please set ANTHROPIC_API_KEY in your .env file.');
   }
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {

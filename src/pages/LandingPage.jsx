@@ -127,7 +127,7 @@ function PlatformModal({ onClose }) {
         {error && (
           <div className="bg-red-900/30 border border-red-500/30 rounded-xl p-4 text-red-300 text-sm">
             {error}
-            <p className="mt-2 text-red-400/70 text-xs">Ensure VITE_ANTHROPIC_API_KEY is set in your .env file.</p>
+            <p className="mt-2 text-red-400/70 text-xs">Ensure ANTHROPIC_API_KEY is set in your .env file.</p>
           </div>
         )}
 

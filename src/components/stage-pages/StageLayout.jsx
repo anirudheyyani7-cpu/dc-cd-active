@@ -216,7 +216,7 @@ export default function StageLayout({
                   <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">
                     <p className="font-semibold mb-1">Error generating analysis</p>
                     <p className="text-red-500 text-xs">{error}</p>
-                    <p className="text-red-400 text-xs mt-2">Ensure VITE_ANTHROPIC_API_KEY is set in your .env file.</p>
+                    <p className="text-red-400 text-xs mt-2">Ensure ANTHROPIC_API_KEY is set in your .env file.</p>
                   </div>
                 )}
 
