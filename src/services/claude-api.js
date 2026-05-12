@@ -1,5 +1,3 @@
-const ANTHROPIC_API_KEY = import.meta.env.ANTHROPIC_API_KEY;
-
 const SYSTEM_PROMPT = `You are the KPMG Datacenter Intelligence Engine — an AI advisor embedded in the K-Nexus Datacenter Lifecycle Management platform. You provide data-driven, actionable insights for datacenter strategy, sourcing, design, compliance, operations, and monetization.
 
 Your analysis should be:
@@ -12,17 +10,10 @@ Your analysis should be:
 Always conclude with a "## Key Risks & Considerations" section and "## Recommended Next Steps" section.`;
 
 export async function callClaude({ prompt, systemOverride, maxTokens = 2048 }) {
-  if (!ANTHROPIC_API_KEY) {
-    throw new Error('Anthropic API key not configured. Please set ANTHROPIC_API_KEY in your .env file.');
-  }
-
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch('/api/claude', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      //'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
@@ -44,17 +35,10 @@ export async function callClaude({ prompt, systemOverride, maxTokens = 2048 }) {
 }
 
 export async function* callClaudeStream({ prompt, systemOverride, maxTokens = 2048 }) {
-  if (!ANTHROPIC_API_KEY) {
-    throw new Error('Anthropic API key not configured. Please set ANTHROPIC_API_KEY in your .env file.');
-  }
-
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch('/api/claude', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      //'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
