@@ -1,4 +1,4 @@
-const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
+const ANTHROPIC_API_KEY = import.meta.env.ANTHROPIC_API_KEY;
 
 const SYSTEM_PROMPT = `You are the KPMG Datacenter Intelligence Engine — an AI advisor embedded in the K-Nexus Datacenter Lifecycle Management platform. You provide data-driven, actionable insights for datacenter strategy, sourcing, design, compliance, operations, and monetization.
 
