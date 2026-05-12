@@ -7,60 +7,66 @@ import {
 
 const STAGES = [
   {
-    num: '01',
+    //num: '01',
     title: 'Strategy &\nAssessment',
-    shortTitle: 'Strategy',
+    shortTitle: 'Strategy & Assessment',
     description: 'Market scan & opportunity analysis',
+    expectedOutput: 'Market opportunity report, site shortlist & investment thesis',
     icon: TrendingUp,
     path: '/stage/01',
     color: '#00338D',
     hoverColor: '#0044b8',
   },
   {
-    num: '02',
+    //num: '02',
     title: 'Supply Chain\nSourcing',
-    shortTitle: 'Sourcing',
+    shortTitle: 'Supply Chain Sourcing',
     description: 'Components, requirements & selection',
+    expectedOutput: 'Vendor shortlist, BOM, cost estimates & supply agreements',
     icon: Package,
     path: '/stage/02',
     color: '#0055A4',
     hoverColor: '#0066c4',
   },
   {
-    num: '03',
+    //num: '03',
     title: 'Design &\nBuild',
     shortTitle: 'Design & Build',
     description: 'Architecture & construction requirements',
+    expectedOutput: 'Technical specs, construction milestones & commissioning plan',
     icon: Settings,
     path: '/stage/03',
     color: '#00529B',
     hoverColor: '#0063bb',
   },
   {
-    num: '04',
+    //num: '04',
     title: 'Compliance\nChecks',
-    shortTitle: 'Compliance',
+    shortTitle: 'Compliance Checks',
     description: 'Tax, regulatory, ESG & cyber',
+    expectedOutput: 'Compliance matrix, tax structure, ESG rating & risk register',
     icon: ShieldCheck,
     path: '/stage/04',
     color: '#1B3A5C',
     hoverColor: '#234d7a',
   },
   {
-    num: '05',
+    //num: '05',
     title: 'DC\nOperations',
-    shortTitle: 'Operations',
+    shortTitle: 'DC Operations',
     description: 'Efficiency, DCIM & uptime management',
+    expectedOutput: 'SLA metrics, uptime reports, DCIM dashboard & O&M plan',
     icon: Activity,
     path: '/stage/05',
     color: '#003580',
     hoverColor: '#0044a0',
   },
   {
-    num: '06',
+    //num: '06',
     title: 'DC\nMonetization',
-    shortTitle: 'Monetization',
+    shortTitle: 'DC Monetization',
     description: 'Revenue models & market positioning',
+    expectedOutput: 'Revenue model, pricing strategy, tenant agreements & ROI analysis',
     icon: DollarSign,
     path: '/stage/06',
     color: '#0077C8',
@@ -234,8 +240,8 @@ export default function LifecycleWheel({ onCenterClick }) {
                       x={numPos.x}
                       y={numPos.y + 4}
                       textAnchor="middle"
-                      fill="rgba(255,255,255,0.5)"
-                      fontSize="10"
+                      fill="rgba(255,255,255,0.6)"
+                      fontSize="11"
                       fontFamily="'JetBrains Mono', monospace"
                       fontWeight="600"
                     >
@@ -247,7 +253,7 @@ export default function LifecycleWheel({ onCenterClick }) {
                 {/* Stage title — horizontal */}
                 {(() => {
                   const titleAngle = (startAngle + endAngle) / 2;
-                  const labelR = (OUTER_R + INNER_R) / 2 + 8;
+                  const labelR = (OUTER_R + INNER_R) / 2;
                   const pos = polarToCartesian(CX, CY, labelR, titleAngle);
                   const lines = stage.title.split('\n');
 
@@ -257,12 +263,15 @@ export default function LifecycleWheel({ onCenterClick }) {
                         <text
                           key={li}
                           x={0}
-                          y={(li - (lines.length - 1) / 2) * 13}
+                          y={(li - (lines.length - 1) / 2) * 14}
                           textAnchor="middle"
                           fill="white"
-                          fontSize={isHovered ? "11" : "10"}
+                          //stroke="rgba(0,5,20,0.35)"
+                          strokeWidth="2.5"
+                          paintOrder="stroke fill"
+                          fontSize={isHovered ? "13" : "12"}
                           fontFamily="'Plus Jakarta Sans', sans-serif"
-                          fontWeight="700"
+                          fontWeight="800"
                           letterSpacing="0.2"
                         >
                           {line}
@@ -324,7 +333,7 @@ export default function LifecycleWheel({ onCenterClick }) {
             fontWeight="500"
             letterSpacing="1.5"
           >
-            INTELLIGENCE
+           DATACENTER INTELLIGENCE
           </text>
           <text
             x={CX} y={CY + 22}
@@ -359,31 +368,53 @@ export default function LifecycleWheel({ onCenterClick }) {
         })}
       </svg>
 
-      {/* Hover tooltip */}
+      {/* Hover tooltip — right side */}
       <AnimatePresence>
-        {hoveredIndex !== null && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 5 }}
-            transition={{ duration: 0.15 }}
-            className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full mt-4 pointer-events-none"
-            style={{ top: SIZE + 12 }}
-          >
-            <div className="glass-dark rounded-xl px-4 py-3 text-center min-w-[200px]">
-              <div className="text-[#0077C8] text-xs font-mono font-bold mb-0.5">
-                STAGE {STAGES[hoveredIndex].num}
+        {hoveredIndex !== null && (() => {
+          const midAngle = hoveredIndex * (360 / STAGES.length) + (360 / STAGES.length) / 2;
+          const rad = ((midAngle - 90) * Math.PI) / 180;
+          const tooltipY = CY + ((OUTER_R + INNER_R) / 2) * Math.sin(rad);
+          return (
+            <motion.div
+              key={hoveredIndex}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -5 }}
+              transition={{ duration: 0.18 }}
+              className="absolute pointer-events-none"
+              style={{ left: SIZE + 20, top: tooltipY, transform: 'translateY(-50%)' }}
+            >
+              {/* Left-pointing arrow connector */}
+              <div style={{
+                position: 'absolute', left: -8, top: '50%', transform: 'translateY(-50%)',
+                width: 0, height: 0,
+                borderRight: '8px solid rgba(26,31,54,0.92)',
+                borderTop: '8px solid transparent',
+                borderBottom: '8px solid transparent',
+              }} />
+              <div className="glass-dark rounded-xl px-4 py-3 min-w-[240px] max-w-[280px]">
+                <div className="text-[#0077C8] text-xs font-mono font-bold mb-1">
+                  STAGE {STAGES[hoveredIndex].num}
+                </div>
+                <div className="text-white font-bold text-sm leading-snug" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  {STAGES[hoveredIndex].shortTitle}
+                </div>
+                <div className="text-white/55 text-xs mt-1 leading-relaxed">
+                  {STAGES[hoveredIndex].description}
+                </div>
+                <div className="mt-2 pt-2 border-t border-white/10">
+                  <div className="text-[#0077C8] text-[10px] font-mono uppercase tracking-wider mb-1">
+                    Expected Output
+                  </div>
+                  <div className="text-white/70 text-xs leading-relaxed">
+                    {STAGES[hoveredIndex].expectedOutput}
+                  </div>
+                </div>
+                <div className="text-[#0077C8] text-xs mt-2 font-medium">Click to explore →</div>
               </div>
-              <div className="text-white font-bold text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                {STAGES[hoveredIndex].shortTitle}
-              </div>
-              <div className="text-white/50 text-xs mt-1">
-                {STAGES[hoveredIndex].description}
-              </div>
-              <div className="text-[#0077C8] text-xs mt-2 font-medium">Click to explore →</div>
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          );
+        })()}
       </AnimatePresence>
     </div>
   );
