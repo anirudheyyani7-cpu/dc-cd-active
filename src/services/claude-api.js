@@ -25,7 +25,7 @@ export async function callClaude({ prompt, systemOverride, maxTokens = 2048 }) {
       'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6',
       max_tokens: maxTokens,
       system: systemOverride || SYSTEM_PROMPT,
       messages: [
@@ -57,7 +57,7 @@ export async function* callClaudeStream({ prompt, systemOverride, maxTokens = 20
       'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6',
       max_tokens: maxTokens,
       stream: true,
       system: systemOverride || SYSTEM_PROMPT,
